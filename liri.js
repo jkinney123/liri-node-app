@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+console.log(require('dotenv').config())
+
 var keys = require("./keys.js");
 
 var Spotify = require ('node-spotify-api');
@@ -97,21 +99,41 @@ axios.get(queryUrl).then(
 });
 }
 
-var spotifySong = function (MovieSongBand) {
+function spotifySong (MovieSongBand) {
   var song;
   
   if (MovieSongBand == null) {
     song = "The Sign";
   }else {
     song = MovieSongBand;
-  };
+  }
+
+  spotify.search({ type: 'track', query: song, limit: 1 }), function(err, data) {
+    if (err) {
+      return console.log("An error occurred: " + err);
+    } 
+    var info = data.tracks.items;
+
+    for (var i = 0; i < info.length; i++); {
+      var preview = info[i].preview_url;
+      var band = info[i].artist[0].name;
+      console.log("Preview of song: " + preview) ;
+      console.log("Artist: " + band)
+    }
+
+      console.log("Artist: " + data.tracks.items[0].artists[0].name);
+    }
+      
+
+    };
+  
 
 
-}
 
 
 
-var getConcert = function (MovieSongBand) {
+
+function getConcert (MovieSongBand) {
   var artist;
 
   if (MovieSongBand == null) {
