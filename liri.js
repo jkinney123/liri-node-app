@@ -16,42 +16,29 @@ var spotify = new Spotify(keys.spotify);
 
 
 var nodeArgs = process.argv;
-var command = process.argv[2];
-var MovieSongBand = "";
-for (var i=3; i < nodeArgs.length; i++) {
-    if (i > 3 && i < nodeArgs.length) {
-        MovieSongBand = MovieSongBand + "+" + nodeArgs[i];
-    }else {
-        MovieSongBand += nodeArgs[i];
-    }
-}
+
+var MovieSongBand = process.argv[3];
+
 
 console.log(command);
 console.log(process.argv);
-askLiri();
 
 
-askLiri = function () {
+var command = process.argv[2];
+
+
 
 switch (command) {
     case ('concert-this'):
-    getConcert();
+    getConcert(MovieSongBand);
     break;
 
     case ('spotify-this-song'):
-        if (nodeArgs[i]) {
-            spotifySong(nodeArgs[i]);
-         } else {
-                spotifySong("The Sign");   
-            }
+       spotifySong(MovieSongBand);
         break;
     
     case ('movie-this'):
-         if (nodeArgs[i]) {
-             getMovie(nodeArgs[i]);
-         }  else {
-             getMovie("Mr. Nobody");
-         } 
+        getMovie(MovieSongBand);
         break;
    
    
@@ -59,26 +46,34 @@ switch (command) {
     liriSays();
     break;          
 };
-}
 
 
 
 
 
-getMovie = function (movieName) {
+ function getMovie(MovieSongBand) {
+  
+  var movie;
 
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+ 
+if (MovieSongBand == null) {
+    movie = "Mr. Nobody";
+  }else {
+    movie = MovieSongBand;
+  };
+
+var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
 
 
 console.log(queryUrl);
 
 axios.get(queryUrl).then(
-  function(response, body) {
+  function(response,) {
 
-    var data = JSON.parse(body); 
+    
 
-    for(i=0; i < data.length; i++)
-    console.log("Release Year: " + response.data.Year);
+    for(i=0; i < response.length; i++)
+    console.log("The movie's rating is: " + response.data.imdbRating);
   })
   .catch(function(error) {
     if (error.response) {
@@ -102,13 +97,32 @@ axios.get(queryUrl).then(
 });
 }
 
-spotifySong = function (song) {
+var spotifySong = function (MovieSongBand) {
+  var song;
+  
+  if (MovieSongBand == null) {
+    song = "The Sign";
+  }else {
+    song = MovieSongBand;
+  };
+
 
 }
 
 
 
-getConcert = function (artist) {
+var getConcert = function (MovieSongBand) {
+  var artist;
+
+  if (MovieSongBand == null) {
+    console.log ("you didn't search for anything!");
+  }else {
+    artist = MovieSongBand;
+  };
+
+
+  
+  
 
     var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
     
@@ -117,6 +131,7 @@ getConcert = function (artist) {
     
     axios.get(queryUrl).then(
       function(response) {
+
         console.log("Release Year: " + response.data.Year);
       })
       .catch(function(error) {
