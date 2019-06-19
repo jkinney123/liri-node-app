@@ -71,11 +71,25 @@ console.log(queryUrl);
 
 axios.get(queryUrl).then(
   function(response,) {
-
+    var response = response.data;
+     if (response) {
+      var movieData = [
+        "*****************************",
+        "Title: " + response.Title,
+        "Release Year: " + response.Year,
+        "IMDB Rating: " + response.imdbRating,
+        "RottenTomatoes Rating: " + response.tomatoRating,
+        "Country: " + response.Country,
+        "Language: " + response.Language,
+        "Plot: " + response.Plot,
+        "Actors: " + response.Actors,
+        "*****************************",
+      ].join("\n")
+      console.log(movieData);
+    }else {
+      console.log("Im sorry, we couldnt find data for the movie you entered");
+    }
     
-
-    for(i=0; i < response.length; i++)
-    console.log("The movie's rating is: " + response.data.imdbRating);
   })
   .catch(function(error) {
     if (error.response) {
@@ -113,10 +127,12 @@ function spotifySong (MovieSongBand) {
       var response = response.tracks.items[0];
      if (response) {
       var songData = [
+        "************************************",
         "Artists: " + response.artists[0].name,
         "Song Name: " + response.name,
         "Preview: " + response.preview_url,
-        "Album: " + response.album.name
+        "Album: " + response.album.name,
+        "*************************************"
       ].join("\n")
       console.log(songData);
 
@@ -166,8 +182,24 @@ function spotifySong (MovieSongBand) {
     
     axios.get(queryUrl).then(
       function(response) {
+      
+        var concertDate = response.datetime;
+        // var venue = JSON.stringify(response.venue);
+       concertDate = moment(concertDate).format("MM/DD/YYYY");
+        
+     if (response) {
+      var concertData = [
+        "***************************",
+        // "Venue: " + venue.name,
+        // "Location-Region: " + response.venue.region,
+        // "Location-City: " + response.venue.city,
+        // "Location-Country: " + response.venue.country,
+        "Date of Show: " + concertDate,
+        "***************************",
 
-        console.log("Release Year: " + response.data.Year);
+      ].join("\n")
+      console.log(concertData);
+    }
       })
       .catch(function(error) {
         if (error.response) {
@@ -191,8 +223,16 @@ function spotifySong (MovieSongBand) {
     });
 };
 
-liriSays = function () {
+function liriSays() {
+fs.readFile("random.txt", "utf8", function(err, data) {
 
+  if (err) {
+    return console.log(err);
+  }
+  var dataArray = data.split(",");
+  spotifySong(dataArray[1]);
+}
+)
 }
 
 
