@@ -108,25 +108,31 @@ function spotifySong (MovieSongBand) {
     song = MovieSongBand;
   }
 
-  spotify.search({ type: 'track', query: song, limit: 1 }), function(err, data) {
-    if (err) {
-      return console.log("An error occurred: " + err);
-    } 
-    var info = data.tracks.items;
-
-    for (var i = 0; i < info.length; i++); {
-      var preview = info[i].preview_url;
-      var band = info[i].artist[0].name;
-      console.log("Preview of song: " + preview) ;
-      console.log("Artist: " + band)
-    }
-
-      console.log("Artist: " + data.tracks.items[0].artists[0].name);
-    }
+  spotify.search({ type: 'track', query: song, limit: 1 })
+    .then(function(response) {
+      var response = response.tracks.items;
+    for (var i = 0; i < response.length; i++); {
       
+      var preview = response.preview_url;
+      var band = response.artist.name;
+      console.log("Preview of song: " + preview) ;
+      console.log("Artist: " + band);
 
-    };
-  
+
+    }})
+    .catch(function(err) {
+      console.log(err);
+    })
+    
+  };
+    
+    
+    
+    
+    
+    
+
+     
 
 
 
