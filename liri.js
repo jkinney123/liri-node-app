@@ -108,23 +108,30 @@ function spotifySong (MovieSongBand) {
     song = MovieSongBand;
   }
 
-  spotify.search({ type: 'track', query: song, limit: 1 })
+  spotify.search({ type: 'track', query: song,})
     .then(function(response) {
-      var response = response.tracks.items;
-    for (var i = 0; i < response.length; i++); {
-      
-      var preview = response.preview_url;
-      var band = response.artist.name;
-      console.log("Preview of song: " + preview) ;
-      console.log("Artist: " + band);
+      var response = response.tracks.items[0];
+     if (response) {
+      var songData = [
+        "Artists: " + response.artists[0].name,
+        "Song Name: " + response.name,
+        "Preview: " + response.preview_url,
+        "Album: " + response.album.name
+      ].join("\n")
+      console.log(songData);
 
+     } else {
+       console.log("could not find match for song");
 
-    }})
-    .catch(function(err) {
-      console.log(err);
-    })
-    
-  };
+     }})
+       .catch(function(err) {
+        console.log(err);
+       
+       })
+
+      };
+   
+  
     
     
     
@@ -139,7 +146,7 @@ function spotifySong (MovieSongBand) {
 
 
 
-function getConcert (MovieSongBand) {
+  function getConcert (MovieSongBand) {
   var artist;
 
   if (MovieSongBand == null) {
